@@ -130,7 +130,9 @@ We set the variable `ajax` we give a value not important what, we define `aqry` 
 Up to you where to display it. 
 
 A simple example:
-<script> function on_doc_load() 
+My site: I want allow people to click on a link and open the relative wikipedia page. I must escape the query or people can write malicious code. So I cannot use link inside the query. I catched the column where is stored the link, that is named path, therefore his class is also path. The on_doc_load() defines the style to format the column as link,and comunicate people that this column is clickable. And when he clicks, it calls the function on_tbl_clk, I check if he clicked the right column and then I open the link consequently. 
+`
+	<script> function on_doc_load() 
 	  { 
 	  
 		var styleSheet = document.createElement("style");
@@ -144,5 +146,81 @@ A simple example:
 		if(tbl.rows[0].cells[c].innerHTML=="path") 
 			window.open("https://it.wikipedia.org/wiki/" + tbl.rows[r].cells[c].innerHTML , "_blank"); } 
 	</script>'
+`
+A complete example:
+We define a button where we suggest the rigth query, the one that allows user to work. The query is SELECT id,titolo,autore,chiusa, '' p ... so the class name will be idtitoloautorechiusap.
+We define the inputs and the relative queryes.
+Also here on_doc_load() defines the styles to allert people that Ok! this is the right query. 
+In the on_tbl_clk() function we check first if the query is the right one: until this menu is selected does not matter if it is the right query or less, this function will be ever processed on click(), so if not we have to exit.  We toggle the  selected row, we fill the table to get a resume, and we open an ajax request. The same as above. And show further informations, after few attempts I found out that display inside the table, in the last cell is very confortable. So I put my answer there. And also here, if he clicks in a specific cell, will be readdressed to the wikipedia page.  
+
+`<span style="position:relative; top:0%; left:0%; "> Get query<br></span>
+	<button  type="button"  onclick="javascript:set_val(`str`,`SELECT id,titolo,autore,chiusa, '''' p FROM pag WHERE chiusa=0;`);">Get Query</button> 
+	<button   type="button" onclick="javascript:document.getElementById(`help`).style.setProperty(`display`,`block`);"> Help</button>
+	
+	<span style ="text-align: left; display:none;" id="help">Clicca su Get Query, imposta i filtri. Ricorda che su SQLite LIKE è insensibile al maiuscolo quindi WHERE titolo LIKE ''%mondo%Infinito%'' restituira anche ''IL MONDO é INFINITO'' mentre = e sensibile al maiuscolo quindi WHERE autore=''Pippo'' restituirà esclusivamente Pippo. Se volete renderlo non sensibile al maiuscolo, convertite ambo i membri a maiuscolo o minuscolo ad esempio  WHERE upper(autore)=upper(''Pippo'')<br>
+	</span>
+	<table id="menutbl" class ="tblfrm tlbmenu" >
+	<tr><td>Id </td><td id="wp_id"></td></tr>
+	<tr><td>Titolo</td><td id="wp_titolo"></td></tr>
+	<tr><td>Autore</td><td id="wp_autore"></td></tr>
+	<tr><td><input type="submit" name="b1" value="Chiudi"></td><td><input type="submit" name="b2" value="Riapri"></td></tr>
+	</table>
+	<input type="hidden" name="qry1" value="UPDATE pag SET chiusa=1 WHERE id={n1}">
+	<input type="hidden" name="qry2" value="UPDATE pag SET chiusa=0 WHERE id={n1}">
+	<input type="hidden" id="n1"  name="n1" value="">
+	
+	<script> 
+		var _row=-1;
+	function on_doc_load() 
+	{ 
+		if(document.getElementsByClassName("idtitoloautorechiusap").length<1) return; 
+		var styleSheet = document.createElement("style");
+		styleSheet.innerHTML=".idtitoloautorechiusap  {float:left;}  .idtitoloautorechiusap tr {color:#069;text-decoration: underline;cursor: pointer; } .selRow,.anstbl .selRow:nth-child(odd)  {background-color:#99EDE2;}";
+		document.body.appendChild(styleSheet);
+	} 
+	  
+	 function on_tbl_clk(r,c) 
+	 { 
+	  
+			var col=document.getElementsByClassName("idtitoloautorechiusap");
+			if(col.length<1 || r<1 ) return; 
+			var tbl=col[0];
+			if(r !=_row && _row>0)
+			{
+				tbl.rows[r].classList.toggle ("selRow");
+				tbl.rows[_row].classList.toggle ("selRow");
+				tbl.rows[_row].cells[4].innerHTML="";
+			}else if(r!=_row)
+					tbl.rows[r].classList.toggle ("selRow");
+			
+			document.getElementById("n1").value=tbl.rows[r].cells[0].innerHTML;
+			document.getElementById("wp_id").innerHTML=tbl.rows[r].cells[0].innerHTML;
+			document.getElementById("wp_titolo").innerHTML=tbl.rows[r].cells[1].innerHTML;
+			document.getElementById("wp_autore").innerHTML=tbl.rows[r].cells[2].innerHTML;
+			var xhr = new XMLHttpRequest();
+			var par=`ajax=1&aqry=` + `SELECT par,row,col FROM par WHERE id_p=` + tbl.rows[r].cells[0].innerHTML ;
+			
+		
+			xhr.open(`POST`, `qLite.php`,true);
+			xhr.setRequestHeader(`Content-Type`, `application/x-www-form-urlencoded; charset=UTF-8`);
+		  xhr.onreadystatechange = function () {	
+			var DONE = 4; // readyState 4 significa che la richiesta è stata eseguita.
+			var OK = 200; // lo stato 200 è un ritorno riuscito. 
+			if (xhr.readyState === DONE) {
+			  if (xhr.status === OK) {
+				//document.getElementById(`furthertable`).innerHTML = xhr.responseText;
+				tbl.rows[r].cells[4].innerHTML=xhr.responseText;
+			  } else {
+				console.log(`Error: ` + xhr.status); // Si è verificato un errore durante la richiesta.
+			  }
+			}
+		  };
+		 xhr.send(par);
+		_row=r;
+		if(c==1)
+			window.open("https://it.wikipedia.org/wiki/" + tbl.rows[r].cells[1].innerHTML , "_blank");  
+			
+	}
+	</script>`
 
 
