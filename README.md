@@ -28,7 +28,7 @@ The name is not obtained from cropping the S, in SQLite, in this case would be c
 SQLite is written.qsort() is one of my prefered functions among with memset(), each time I use qsort() I am dumbily happy, never understood why. The q in qsort() means "quick", so "qLite"  would mean quick [&] Lite. That match pefectly with this project. Ok it is pervert enough: takken.
 
 # Structure
-The journey begins with the download of the file qLite.php. It is the only thing required. Put inside you xampp folder or in your website. And open it typing simple his name. So localhost/qLite.php  or yourwebsite.com/qLite.php. If you use XAMPP, be careful that SQLite is not available to default with php. So in Windows you have to go to the php.ini file and decoment extension=sqlite3 and pdo_sqlite. Restart apache. And now should be available. Also in Linux you have to include these extension, you have to install the php extension, chown the folder and give write rights to others with chmod o+w <folder> .This last step is hard to find in a online documentation and took me several hours to understand what was wrong.
+The journey begins with the download of the file qLite.php. It is the only thing required. Put inside you xampp folder or in your website. And open it typing simple his name. So localhost/qLite.php  or yourwebsite.com/qLite.php. If you use XAMPP, be careful that SQLite is not available by default with php. So in Windows you have to go to the php.ini file and decoment extension=sqlite3 and pdo_sqlite. Restart apache. And now should be available. Also in Linux you have to include these extension, you have to install the php extension, chown the folder and give write rights to others with chmod o+w &lt;folder&gt; .This last step is hard to find in a online documentation and took me several hours to understand what was wrong.<br>
 Now a look inside, there are several constants, and probably you need to translate the labels but this one is the one that surely the admin have to change. It is his the admin password, already cripyted, accordingly to the Hash algorithm defined with QLITE_HASH_ALG. Take a look to the pHp hash() function to see which algorithms are available. The default password is  Bella Ciao , valid also as default password for the users. 
 
 	define ("QLITE_PWD_PWD","e52cbe1aa2f5cf7b68225ad60eb9ba0d5bc376c5481764d70929eb3d65d00512");
@@ -42,10 +42,10 @@ After you insert it, we change the name of the database, and you have to do with
 We create a user, we create a database. Now we Grant a user to a database. An user can only access to the database where is granted. Also if a database is granted for public, the user must be granted. To do it, left-bottom  Grant->User To Db.  The SQLite database can be opened read-only or write, these are the only two options available, so  the field canwrite refer to the possibility of the user to create tables,  write, and make modification. A user should never be allowed to write in shared databases (also if he has to write). The canwrite must be set to 1 or to user that own their database for own purpose, or to trusted superuser. 
 
 Now you can create how many database you want, how many users you want. But there is a problem. If the database serves a team, you cannot give to 10 persons the rights to write DELETE FROM table. If there is also just 2 persons that can do it, there are still 1.5 person too much. So repeat nobody can write.
-We need a trap-door, where users cannot put their hands and work with defined queryes. The solution is the menu. The name comes from the classical menu bar of windows. From the menu, every user can write in each database, also if he has no access rights, he can write also in the main. Cause this power all the menus are stored inside the main, and only the admin, can grant them. Menus becomes therefore a way to put code inside our GUI and can serve different purpose. We will see few examples later. I am not going to convice you that this is the best solution, of course a specific application is better. But the costs for a specific application grow quickly and small team of 4-5 peoples cannot surely invest 80% of their time to develope a specific application. This would be justified only for big projects. But also if it is not a the best solution, it has still some advantage. You can filter and sort in each way you want, and with a specific application this is not possible, also if you invest a lot of time.   
+We need a trap-door, where users cannot put their hands and work with defined queryes. The solution is the menu. The name comes from the classical menu bar of windows. From the menu, every user can write in each database, also if he has no access rights, he can write also in the main. Cause this power all the menus are stored inside the main, and only the admin, can grant them. Menus becomes therefore a way to put code inside our GUI and can serve different purpose. We will see few examples later. I am not going to convice you that this is the best solution, of course a specific application is better. But the costs for a specific application grow quickly and small team of 4-5 peoples cannot surely invest 80% of their time to develope a specific application. This would be justified only for big projects. But also if it is not the best solution, it has still some advantage: you can filter and sort in each way you want, and with a specific application this is not possible, also if you invest a lot of time.   
 Now we have another problem. The menu works fine, but would be nice to select from a table the values and avoid typos and also save a bit time. Now the hack. The answer table has assigned a class which name is composed from the concatenation of the header. This means that if we write SELECT one,two, foo ...  the table has class="onetwofoo". 
 Now we can detect if the user works with the correct query, and if he does, it is very simple fill the fields and update,delete or inherit and insert new ones.   
-How do we crack this? Just use alias SELECT '10' one,'30' two, 'ed'  foo, you can force whatever you want. But surely a spreadsheets does not solves the problem. So this just a weird way to delete the item 30 clicking on 20. There is also the possibility to put a log, to discourage Neo to make the hack of the century.  Be carefull that if you use simple tables, id,name ... can have clone and match  tables that serves differently purposes. In this case enforce the header with alias and use more columns.
+How do we crack this? Just use alias SELECT '10' one,'30' two, 'ed'  foo, you can force whatever you want. But surely a spreadsheets does not solves the problem. So this just a weird way to delete the item 30 clicking on 20. There is also the possibility to put a log, to discourage Neo to make the hack of the century.  Be carefull that if you use simple tables, id,name ... may match also other  tables that serves differently purposes. In this case enforce the header with alias and use more columns.
 
 # Menu SQL
 
@@ -72,21 +72,77 @@ UID: not GUID, this is the way I identify my menus, so can I give you some suppo
 dateid: the last change for the menu
 
 Now we grant them: 
-
+ 
 CREATE TABLE IF  NOT EXISTS mtodu( 
 			id_m INTEGER NOT NULL,
 			id_d INTEGER, 
 			id_u INTEGER
    );
-Despite his simplicity, it took me a couple of days to define his structure. Until I understood that there is no way to do all the job with a single query but we have to split the problem .
-
-# Menu php
-  The table where is stored the menu is 
-Since the menu is writted on Javascript, he needs few handlers inside the document let see them:
+Despite his simplicity, it took me a couple of days to define his structure. Until I understood that there is no way to do all the job with a single query but we have to split the problem.
+Of course id_m (menu) must be NOT NULL, he is our main charachter. But id_d(dbs) and id_u(users)... why not?
+So there are 4 cases:
 <ul>
-  <li></li>
+	<li>id_d IS NULL, id_u IS NULL  The menu is available for all users and inside each database. Typically a safe tool</li>
+	<li>id_d IS NULL, id_u=5  The menu is available over all, only for the id_u=5(an example). Typically super-user powers</li>
+	<li>id_d=3, id_u IS NULL  The menu is available only inside a specific database for all granted user. Typically the write functions of this specific db, with each one works</li>
+	<li>id_d=3, id_u=5  The menu is available only inside a specific database for the specific user. Typically team-manager powers.</li>
 </ul>
 
+the user public,must be granted for each menu, also the safe tools.
+Practically you can assign menus withs surgical precision, practically this is the true grant. Intended as can write this table or this, can update here but not here. 
 
+# Menu php/html
+
+When we writing a menu that is going to submit we must know wich fields will be processed. The input that submits must have the name b1 or b2 or b3. You can easily increase this number adding rows to the variable `$submits`. With each one of these buttons is associated a query, respectively qry1,qry2,qry3. 
+Now we define some macros
+	array("s1","{s1}","s")  this will replace all occurrences inside qryn of {s1} with the value of the input named s1 formating it as text because s is specified
+ 	array("n1", "{n1}","n"), as above but n specificate that is a numeric value
+  
+an input named `wdb`, will open a different database and not the current.
+if `lqry` is specified, it will execute a "log" query, this is his purpose but of course you can do wathever you want
+if `ldb` is specified, it will execute the "log" query, in another database
+a basic implementation so will be:
+
+`<input type="submit" name="b1" value="Close">
+<input type="submit" name="b2" value="Open">
+<input type="hidden" name="qry1" value="UPDATE pag SET chiusa=1 WHERE id={n1}">
+<input type="hidden" name="qry2" value="UPDATE pag SET chiusa=0 WHERE id={n1}">
+<input type="hidden" id="n1"  name="n1" value="">`
+So the first two input define two buttons, with the first one is binded the hidden qry1 and with the second qry2 .
+The qry1 and qry2, contains the macro {n1}. This value will be replaced with the value of the last hidden input named n1. This will updated programmatically, when the user clicks on the table. 
+So you do not have to write functions inside the database, and you can quickly perform write operations without occur in accidental UPDATE without WHERE. 
+ 
+# Menu Javascript
+The menu is written in Javascript. So we need some handlers.
+At the load of the page it calls `on_doc_load()`, that you have to define if you need
+The answer table has class composed from the concatenation of the headers (if valid of course, otherwise nothing, no way that can be a valid query) 
+Each cell has class named after his own header. This can be a bit dangerous, can match existings classes, I use complex name, but I cannot give warranty, if some weird behaviour happen use an alias. 
+With each cell is bounded a `on_tbl_clk(row,col)`, that you have to define. 
+There is a div with id="serv_container" where there is a empty, and hidden textarea, the show up when get filled. If you need more controls, you need to add them programmatically. 
+There is at the very-end a `div` with id `furthertable` where to show, other tables loaded with AJAX.
+If you use AJAX, you have to do it with POST and you must set a variable named ajax. A query specified in a variable aqry and if you need different database you have to specificate it inside a aqry so a tipically AJAX request will be:
+
+`
+var par=`ajax=1&aqry=` + `SELECT par,row,col FROM par WHERE id_p=` + tbl.rows[r].cells[0].innerHTML ;
+xhr.open(`POST`, `qLite.php`,true);
+.`
+We set the variable `ajax` we give a value not important what, we define `aqry` and than we open a request `POST`.
+Up to you where to display it. 
+
+A simple example:
+<script> function on_doc_load() 
+	  { 
+	  
+		var styleSheet = document.createElement("style");
+		styleSheet.innerHTML=".path td {color:#069;text-decoration: underline;cursor: pointer;}";
+		document.body.appendChild(styleSheet);
+		} 
+	  
+	  function on_tbl_clk(r,c) 
+	  { 
+		var tbl= document.getElementById("anstbl"); 
+		if(tbl.rows[0].cells[c].innerHTML=="path") 
+			window.open("https://it.wikipedia.org/wiki/" + tbl.rows[r].cells[c].innerHTML , "_blank"); } 
+	</script>'
 
 
