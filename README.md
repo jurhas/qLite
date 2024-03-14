@@ -4,111 +4,131 @@ Database Management System SQLite based
 qLite is a Database Management System Server that uses SQLite as store engine. 
 The scope of work:
 <ul>
-  <li>Work on each platform. You just need a browser.</li>
-  <li>Work as server</li>
-  <li>Support Users</li>
-  <li>Support Grants</li>
+  <li>Works on each platform. You just need a browser.</li>
+  <li>Works as server</li>
+  <li>Supports Users</li>
+  <li>Supports Grants</li>
   <li>Assign databases to Users (where to write CREATE TABLE for example)</li>
-  <li>No Hardware required, just few kb of space in a internet site</li>
-  <li>Allow safe write operations also to not experencied user </li>
-  <li>Allow people to work in the same database no matter where they are</li>
-  <li>Allow to implement small masks, MS Access style</li>
-  <li>Create small work tasks</li>
-  <li>Lightweight, fast and no external dependencies but SQLite. qLite is just a single. pHp. file.</li>
+  <li>No Hardware required, just few kB of space in a internet site</li>
+  <li>Allow safe write operations also to not experienced users </li>
+  <li>Allow people to work in the same database no matter where they are and create small work tasks</li>
+  <li>Build masks, MS Access style</li>
+  <li>Lightweight, fast and no external dependencies but SQLite. qLite is just a. Single. PHP. File.</li>
 </ul>
-If it seems too much... no it is not too much I am surely forgeting something.
-Target are internet community that works on the same project. Companies that work with small-medium project. And everywhere several users requires to share a common database but they do not want invest in a server DELL Power PQRST 55-(a lot of 0's)-20  where to run Oracle Enterprise Edition.
+If it seems too much... no it is not too much, I am surely forgetting something.
+Target are internet community that works on the same project. Companies that work with small-medium project. And everywhere several users requires sharing a common database, but they do not want to invest in a server DELL Power  55-(a lot of 0's)-20  where to run Oracle Enterprise Edition.
 
-# History
+## History
 
-I briefely tell the history of this project. 
-I was boting the italian Wikipedia dump, when my bot begin to send weird answer. In this case Bio's where the Sex was not set. "I hope it found a Teletubie", it wasn't.  After few investigation I found out that there was some parenthesis to fix. This time I was not guilty. I scanned again the dump and I detect all the parenthesis, and I want to give them a relative big file to help them to mantein the wiki . And here comes the problem: how do I give them a structured filed? my provider barely allow me to access to my database, Access... No! Access No!, but also if I would use it there is no way to allow people sparsed in Italy to work on the same db. SQLite requires experencied users, you need a shell or a GUI( matter of taste), and also here no whay to share databases.<br> 
+I briefly tell the history of this project. 
+I was boting the italian Wikipedia dump, when my bot begins to send me weird answer. In this case Bio's where the Sex was not set. "I hope it found a Teletubby", it wasn't.  After few investigations I found out that there was some parenthesis to fix. This time I was not guilty. I scanned again the dump and I detect all the parenthesis, and I want to give them a relative big file to help them to maintain the wiki . And here comes the problem: how do I give them a structured filed? My provider barely allow me to access to my database, MS Access... No! MS Access No!, but also if I would use it there is no way to allow people scattered across Italy to work on the same db. SQLite requires experienced users, you need a shell or a GUI( matter of taste), and also here no way to share databases.<br> 
 Hold my beer...qLite is born.<br>
-The name is not obtained from cropping the S, in SQLite, in this case would be capital. The q is dedicate to the C function qsort(). My beloved language and the language which 
-SQLite is written.qsort() is one of my prefered functions among with memset(), each time I use this function I am dumbily happy, never understood why. The q in qsort() means "quick", so "qLite"  would mean "quick (and) Lite", that match pefectly with the philosophy of this project. Ok,it is pervert enough: takken.
+The name is not obtained from cropping the S, in SQLite, in this case would be capital. The q is dedicated to the C function qsort(). My beloved language and the language which 
+SQLite is written.qsort() is one of my preferred functions with memset(), each time I use this function I am dumbly happy, never understood why. The q in qsort() means "quick", so "qLite"  would mean "quick (and) Lite", that match perfectly with the philosophy of this project. Ok, it is pervert enough: taken.
 
-# Structure
-The journey begins with the download of the file `qLite.php`. It is the only thing required. Put inside you XAMPP folder or in your website. And just type his name. Somoething like : `localhost/qLite.php`  or `yourwebsite.com/qLite.php`. If you use XAMPP, be careful that SQLite is not available by default. So in Windows you have to go to the php.ini file and decoment extension=sqlite3 and pdo_sqlite. Restart apache. And now should be available. Also in Linux you have to include these extension, you have to install the php extension, `chown` the folder and give write rights to `others` with `chmod o+w &lt;folder&gt;` .This last step is hard to find in a online documentation and took me several hours to understand what was wrong.<br>
-Now a look inside, there are several constants, and probably you need to translate the labels but this one is the one that surely the admin have to change. It is his the admin password, already cripyted, accordingly to the Hash algorithm defined with QLITE_HASH_ALG. Take a look to the pHp hash() function to see which algorithms are available. The default password is  `Bella Ciao` , valid also as default password for the users.<br> 
-`
+## Structure
+
+The journey begins with the download of the file `qLite.php`. It is the only thing required. Put it inside your XAMPP folder or in your website. And just type his name. Somoething like : `localhost/qLite.php`  or `yourwebsite.com/qLite.php`. If you use XAMPP, be careful that SQLite is not available by default. So in Windows you have to go to the php.ini file and decomment `extension=sqlite3` and `pdo_sqlite`. Restart Apache. And now should be available. Also on Linux you have to include these extensions, you have to install the php extension, `chown` the folder and give write rights to `others` with `chmod o+w <folder>`. This last step is hard to find in an online documentation and took me several hours to understand what was wrong.<br>
+Now a look inside, there are various constants, and probably you need to translate the labels but this one is the one that surely the admin have to change. It is his the admin password, already cripyted, accordingly to the Hash algorithm defined with QLITE_HASH_ALG. Take a look to the pHp hash() function to see which algorithms are available. The default password is  `Bella Ciao`, valid also as default password for the users.<br> 
+
+	`
 	define ("QLITE_PWD_PWD","e52cbe1aa2f5cf7b68225ad60eb9ba0d5bc376c5481764d70929eb3d65d00512");
 	define ("QLITE_HASH_ALG","sha256");
-`
+	`
+ 
 Inside there is a tool that allow you to compute a new password with a specific password field. So may be you make a first access with `Bella Ciao`  compute the new one and overwrite the existing one.<br>
-At the first access it creates a new database, if you do not change anithing, will have the path  `qLite.sqlite3` and the name `main` . This database is the brain of qLite, here are saved all the users password and,the path of the database managed by qLite and all the menus (we will see later). The table `users`, has three fields, `user`, that is the nickname, unique case insensitive, so JURHAS or jurhas  are exactly the same. Since there is a UNIQUE INDEX upper(user), remember that to allow the database to use this indexes in the query plan the WHERE clause must match this expression. But I do not think you are never going to have so much users or dbs to experience performances problems. But I have to aware you.  Ever in the table `users` there is the field `pwd`, where is stored the crypted password. It is useless for `admin`, his password is saved in the header as already seen,  `public` opposite problem, he do not need also to authenticate him self, and the groups. Using the postgreSQL definition of group "the group is a user that cannot login" . So to simulate this behaviour just set `pwd` to a not valid sha256 value. I would suggest simply 'group', so you can filter easily. There is a further field, the day I felt generous, it is `lev`,  it gives you another way to select a group of users, may be 'superuser' and 'user', the logic is completely up to you. I did not use it in any place so you can assume every logic. To add a new user, use the query displayed bottom left insert->User.  The password displayed is also `Bella Ciao`, there is a table named `utog` where to define the group membership. I did not use it in any place, you can modify it, drop whatever you want. As sysadmin, remember that you do not serve the group, but the group must serve you, if work with group does things complicated, do not use it. Very simple.<br> 
-The second table is `dbs`, where are stored all the databases paths and the name to display. A path can be C:/users/.../wp.sqlite3, meanwhile the name to display can be just wp. Inside the database we refer to the databases only with the name, stored in the field `db`. Therefore also `db` is unique, case insensitive. `Path` has no unique index , so there could be two different rows the points to the same database. If it scares you, create a unique index:  CREATE UNIQUE INDEX u_ix_dbs_path ON dbs(upper(path)); It is not completely bullet proof since an absolute path and a relative path can refer to the same db and no way to detect it. The last field is `grp`, it is the abbreviation of group, but I could not use it as name since it is a SQL key word. I think that with this basic settings you can manage up to hundred database without big problems, but show 100 databases is not practicable, when we set `grp` the database will be showed inside a drop down menu with the title grp, meanwhile if grp is not set, it will be shown outside, to have a quicker access to them.<br>
-To insert/create a database with  qLite, you have to use the specific Admin->New Database that you can find in the Top-Right. Here you have to insert  the  path. This  will create a new one or add an existing one. Inside the new added database it will be created a table, qLite_qry, where the users can store their queryes. The queryes will be displayed on the left bottom of the control pannel, also here if `grp` is set, the query will be added inside a dropdown, meanwhile if not set outside. There is a UNIQUE (upper(name),upper(query)), that means that inside a group cannot exists two queries with the same name. It is not possible to exclude the creation of this table and to read it, if you want modify it you have to do it programmactically.
-After you insert it, we change the name of the database, and you have to do with the query update->Database Name. Refear to it with the path, put a  db name. After this, you can forget the path. Now you have to refer to this database only with the name. The reason for this two-step solution, is the error handling, it is hard to understand what to do in case of error. <br>
-We create a user, we create a database. Now we Grant a user to a database. An user can only access to the database where is granted. Also if a database is granted for public, the user must be granted. To do it, left-bottom  Grant->User To Db.  The SQLite database can be opened read-only or write, these are the only two options available, so  the field `canwrite` refer to the possibility of the user to write, create tables, insert,delete, update.... A user should never be allowed to write in shared databases (also if he has to write). The `canwrite` should  be set to 1 or if a user has exclusive access to a database, let say his sandbox or to trusted superuser.<br> 
+Inside there is a tool that allow you to compute a new password with a specific password field. So maybe you make the first access with `Bella Ciao`  compute the new one and overwrite the existing one.<br>
+At the first access it creates a new database, if you do not change anything, will have the path  `qLite.sqlite3` and the name `main` . This database is the brain of qLite, here are saved all the users password and, the path of the database managed by qLite and all the menus (we will see later). The table `users`, has three fields, `user`, that is the nickname, unique case-insensitive, so JURHAS or jurhas  are exactly the same. Since there is a UNIQUE INDEX upper(user), remember that to allow the database to use this indexes in the query plan, the WHERE clause must match this expression. But I do not think you are never going to have so many users or db's to experience performances problems. But I have to advise you.  Ever in the table `users` there is the field `pwd`, where is stored the crypted password. It is useless for `admin`, his password is saved in the header as already seen,  `public` opposite problem, he does not need also to authenticate him self, and the groups. Using the postgreSQL definition of group "the group is a user that cannot login" . So to simulate this behavior, just set `pwd` to a not valid sha256 value. I would suggest simply 'group', so you can filter easily. There is a further field, the day I felt generous, it is `lev`,  it gives you another way to select a group of users, may be 'superuser' and 'user', the logic is completely up to you. I did not use it in any place, so you can assume every logic. To add a new user, use the query displayed bottom left insert->User.  The password displayed is also `Bella Ciao`. There is a table named `utog` where to define the group membership. I did not use it in any place, you can modify it, drop whatever you want. As sysadmin, remember that you do not serve the group, but the group must serve you, if work with group does things complicated, do not use it. Very simple.<br> 
+The second table is `dbs`, where are stored all the databases paths and the name to display. A path can be C:/users/.../wp.sqlite3, meanwhile the name to display can be just wp. Inside the database, we refer to the databases only with the name, stored in the field `db`. Therefore, also `db` is unique, case-insensitive. `Path` has no unique index,  so there could be two different rows that point to the same database. If it scares you, create a unique index:  CREATE UNIQUE INDEX u_ix_dbs_path ON dbs(upper(path)); It is not completely bulletproof, since an absolute path and a relative path can refer to the same db and no way to detect it. The last field is `grp`, it is the abbreviation of group, but I could not use it as name since it is a SQL key word.  I think that with this basic settings you can manage up to a hundred databases without big problems. So to visualize them inside a more comfortable drop-down menu, we set `grp`, meanwhile if grp is not set, it will be shown outside, to have a quicker access to them.<br>
+To insert/create a database with  qLite, you have to use the specific Admin->New Database that you can find in the Top-Right.  This is the only place where SQLite is open with the flag CREATE. Here you have to insert  the path. This  will create a new one or add an existing one. Inside the new added database qLite will create a table, qLite_qry, where the users can store their queries. The queries will be displayed on the left bottom of the control panel, also here if `grp` is set, the query will be added inside a dropdown, meanwhile if not set outside. There is a UNIQUE (upper(name),upper(query)), that means that inside a group cannot exist two queries with the same name. It is not possible to exclude the creation of this table and to read it, if you want to modify it you have to do it programmatically.<br>
+After you insert it, we change the name of the database, and you have to do with the query update->Database Name. Refer to it with the path, put a  db name. After this, you can forget the path. Now you have to refer to this database only with the name. The reason for this two-step solution, is the error handling, it is hard to understand what to do in case of error. <br>
+We create a user, we create a database. Now we Grant a user to a database.  A user can only access to the database where is granted. Also, if a database is granted for public, the user must be granted. To do it, left-bottom  Grant->User To Db.  The SQLite database can be opened read-only or write, these are the only two options available, so  the field `canwrite` refer to the possibility of the user to write: create tables, insert,delete, update.... A user should never be allowed to write in shared databases (also if he has to write). The `canwrite` should  be set to 1  if a user has exclusive access to a database, let say his sandbox or  is a trusted superuser.<br> 
 
-Now you can create how many database you want, how many users you want. But there is a problem. If the database serves a team, you cannot give to 10 persons the rights to write DELETE FROM table. If there is also just 2 persons that can do it, there are still 1.5 person too much. So most democratic thing: nobody can write.<br>
-We need a trap-door, where users cannot put their hands and work with defined queryes. The solution is the menu. The name comes from the classical menu bar of windows. From the menu, every user can write in each database, also if he has no access rights, he can write also in the main. Cause this power all the menus are stored inside the main, and only the admin, can build them, or if he needs help, he has to overview, and the first thing to check is in which database writes.  Menus becomes therefore a way to put code inside our GUI and can serve different purpose. We will see few examples later. I am not going to convice you that this is the best solution, of course a specific application is better. But the costs for a specific application grow quickly and small team of 4-5 peoples cannot surely invest 80% of their time to develope a specific application. This would be justified only for big projects. But also if it is not the best solution, it has still some advantages: you can filter and sort in each way you want, and with a specific application this is not possible, also if you invest a lot of time.<br>
-Now we have another problem. The menu works fine, but would be nice to select from a table the values and avoid typos and save a bit time. Now the hack. The answer table has assigned a class which name is composed from the concatenation of the header. This means that if we write SELECT one,two, foo ...  the table has class="onetwofoo". 
-Now we can detect if the user works with the correct query, and if he does, it is very simple fill the fields and update,delete or inherit and insert new ones.   
-How do we crack this? Just use alias SELECT '10' one,'30' two, 'ed'  foo, you can force whatever you want. But surely a spreadsheets does not solves the problem. So this just a weird way to delete the item 30 clicking on 20. There is also the possibility to put a log, to discourage Neo to make the hack of the century.  Be carefull that if you use simple tables, id,name ... may match also other  tables that serves differently purposes. In this case enforce the header with alias and use more columns.
+Now you can create how many databases you want, how many users you want. But there is a problem. If the database serves a team, you cannot give to 10 persons the rights to write DELETE FROM table. If there is also just 2 persons that can do it, there are still 1.5 person too much. So the most democratic thing: nobody can write.<br>
+We need a trap-door, where users cannot put their hands and work with defined queries. The solution is the menu. The name comes from the classical menu bar of windows. From the menu, every user can write in each database, also if he has no access rights, he can write also in the main. Cause this power all the menus are stored inside the main, and only the admin, can build them, or if he needs help, he has to overview them, and the first thing to check is in which database writes.  Menus becomes therefore a way to put code inside our GUI and can serve different purpose. We will see few examples later. I am not going to convince you that this is the best solution, of course a specific application is better. But the costs for a specific application grow quickly and small team of 4-5 peoples cannot surely invest 80% of their time to develop a specific application. This would be justified only for big projects. But also if it is not the best solution, it has still some advantages: you can filter and sort in each way you want, and with a specific application this is not possible, also if you invest a lot of time. What do we do is minimize the discrepancy,  work safe,  get quasi-dedicated form, but investing the less as possible. <br>
+Now we have another problem. The menu works fine, but would be nice to select from a table the values and avoid typos and save a bit of time. Now the hack. The answer table has assigned a class which name is composed of the concatenation of the header. This means that if we write SELECT one,two, foo ...  the table has class="onetwofoo". 
+Now we can detect if the user works with the correct query, and if he does, it is very simple to fill the fields and update,delete or inherit and insert new ones.   
+How do we crack this? Just use alias SELECT '10' one,'30' two, 'ed'  foo, you can force whatever you want. But surely a spreadsheet does not solve the problem. So this just a weird way to delete the item 30 clicking on 20. There is also the possibility to put a log, to discourage Neo to make the hack of the century.  Be careful that if you use simple tables, id,name ... may match also other  tables that serve differently purposes. In this case, enforce the header with alias and use more columns.
 
-# Menu SQL
+## Menu SQL
 
 The table is the follow:
-`CREATE TABLE IF NOT EXISTS  menus( 
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			name TEXT NOT NULL CHECK(length(name)>0),
-			isif INTEGER DEFAULT 0 NOT NULL,
-			cof TEXT CHECK( iif(isif>0, cof IS NOT NULL AND length(cof)>0,1)), 
-			nameof TEXT DEFAULT '',
-			grp TEXT DEFAULT '',
-			description TEXT,
-			UID INTEGER,
-			dateid TEXT);
-`
-We start with `id`, the uniquiness is granted for (name,grp), so we have to identify a menu with his id, otherwise becomes uncomfortable.<br>
+	`
+	CREATE TABLE IF NOT EXISTS  menus( 
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		name TEXT NOT NULL CHECK(length(name)>0),
+		isif INTEGER DEFAULT 0 NOT NULL,
+		cof TEXT CHECK( iif(isif>0, cof IS NOT NULL AND length(cof)>0,1)), 
+		nameof TEXT DEFAULT '',
+		grp TEXT DEFAULT '',
+		description TEXT,
+		UID INTEGER,
+		dateid TEXT);
+	`
+ `id`, the uniqueness is granted for (name,grp), so we have to identify a menu with his id, otherwise becomes uncomfortable.<br>
 `Name`: is the name to be shown.<br>
-`isif`:  if 0  cof is  raw html/javascript code, if 1 cof is the name of a function that get called before the submit.  You have to define it<br>
-`cof`: can be code or the name of a function accordingly to isif<br>
-`nameof`: NULL or the name of a function that get called after the submit. You have to define it. Not yet supported.<br>
-`grp`: grp here, and only here, accepts also paths,separated by a dot  for example: Tools.String . This will build a submenu. The number of menus can grow very quicly so we need better instruments. But it is still a bottle neck,  I think that with just with few databases we are going to have duplicates, but I still didn't find an elegant solution to avoid this problem. So as C teach us, invent unique names,may be DBNAME_xxx, Operative Systems are written in this way.<br>
-`description`: this is for your use, when you are going to have several menus you will need a briefly explanation, rather to read the whole code.<br>
+`isif`:  if 0,  `cof` (the next field) is raw html/javascript code, if 1 `cof` is the name of a function that get called before the submit.<br>
+`cof`: can be code or the name of a function accordingly to isif. You have to define the function.<br>
+`nameof`: NULL or the name of a function that get called after the submit. You have to define the function. <br>
+`grp`: `grp` here, and only here, accepts also paths, separated by a dot  for example: Tools.String . This will build a submenu. The number of menus can grow very quickly so we need better instruments. But it is still a bottleneck,  I think that with just with few databases we are going to have duplicates, but I still didn't find an elegant solution to avoid this problem. So as C teach us, invent unique names, may be DBNAME_xxx, Operative Systems are written in this way. Or  dbname.operation, for example wp.insert,  the user for each command has to navigate inside two dropdowns, but the uniqueness is achievable.<br>
+`description`: this is for your use, when you are going to have several menus you will need a brief explanation, rather to read the whole code.<br>
 `UID`: like  GUID but not a GUID, I like a readable number, this is the way I identify my menus, so can I give you some support. It starts from 1,000,000,001, under this number you can use also for your scope.<br>
 `dateid`: the last change for the menu<br>
 
 Now we grant them: 
- `
+ 	`
 	CREATE TABLE IF  NOT EXISTS mtodu( 
 			id_m INTEGER NOT NULL,
 			id_d INTEGER, 
 			id_u INTEGER
-   );`
-Despite his simplicity, it took me a couple of days to define his structure. First I did it in two tables, than triggers, yap several attempts. Until I understood that there is no way to do all the job with a single query but we have to split the problem.
-Of course id_m (menu) must be NOT NULL, he is our main charachter. But id_d(dbs) and id_u(users)... why not?
+   	);`
+Despite his simplicity, it took me a couple of days to define his structure. First I did it in two tables, then triggers, yap several attempts. Until I understood that there is no way to do all the job with a single query, but we have to split the problem.
+Of course id_m (menu) must be NOT NULL, he is our main character. But id_d(dbs) and id_u(users)... why not?
 So there are 4 cases:
 <ul>
-	<li>id_d IS NULL, id_u IS NULL  The menu is available for all users and inside each database. Typically a safe tool</li>
-	<li>id_d IS NULL, id_u=5  The menu is available in each database, only for the id_u=5(an example). Typically super-user powers</li>
-	<li>id_d=3, id_u IS NULL  The menu is available only inside a specific database for all granted user. Typically the write functions of this specific db</li>
-	<li>id_d=3, id_u=5  The menu is available only inside a specific database for the specific user. Typically team-manager powers.</li>
+	<li>id_d IS NULL, id_u IS NULL  The menu is available for all users and inside each database. Typically, a safe tool</li>
+	<li>id_d IS NULL, id_u=5  The menu is available in each database, only for the id_u=5(an example). Typically, super-user powers</li>
+	<li>id_d=3, id_u IS NULL  The menu is available only inside a specific database for all granted user. Typically, the write functions of this specific db</li>
+	<li>id_d=3, id_u=5  The menu is available only inside a specific database for the specific user. Typically, team-manager powers.</li>
 </ul>
 If you promote a menu from shared to reserved, remember to delete first the existing grant, because until exists this row the menu is shared.<br> 
 The user public must be granted for each menu, also the safe tools.<br>
-Practically you can assign menus withs surgical precision, this is the true grant.
+Practically you can assign menus with surgical precision, this is the true grant.
 
-# Menu php/html
+## Menu php/html
 
-When we writing a menu that is going to submit we must know wich fields will be processed. The inputs that submits must have the name b1 or b2 or b3. You can easily increase this number adding rows to the variable `$submits`, in the same way you can increase the number of the other macros . With each one of these buttons is associated a query, respectively qry1,qry2,qry3.<br>
+When we write a menu that is going to submit, we must know which fields will be processed. The inputs that submits must have the name b1 or b2 or b3. You can easily increase this number adding rows to the variable `$submits`, in the same way you can increase the number of the other macros .  With each one of these buttons is associated a query, respectively qry1,qry2,qry3.<br>
+These queries better will contain macros. For example: {s1}.<br>
+What value we have to give to this macro?
+These macros are defined with the variable $tags, you can increase the number of macros, you can change the aspect of the macro. A row of this variable is so composed:
+ array("s1","{s1}","s")  
+the first element is the name of the &lt;input&gt; that contains the value that is going to replace the macro in the form of the second element. The third element tells that is  a string  and it requires to be quoted and escaped, meanwhile n tells that is a number.  Now are defined macros from s1 to s4 and from n1 to n4.<br>
+So the  &lt;input&gt; will be:
 
-	array("s1","{s1}","s")  this will replace all occurrences inside qry(n) of {s1} with the value of the input named s1 formating it as text because s is specified<br>
- 	array("n1", "{n1}","n"), as above but n specificate that is a numeric value<br>
+ `<input  name="s1" value="Hello World">`
+
+The query will be hidden, nobody can put hands over it:
   
-an input named `wdb`, will open a different database and not the current. This is the field to check if other people write menus.<br>
-if `lqry` is specified, it will execute a "log" query, this is his purpose but of course you can do wathever you want<br>
-if `ldb` is specified, it will execute the "log" query, in another database. Also this, is to check.<br>
+`<input  type="hidden" name="qry1" value="INSERT INTO foo VALUES({s1}">`
+
+The query qry1 will be executed if the user clicks on the submit b1:  
+
+`<input  type="submit" name="b1" value="Hello World">`
+
+You can specify the follow variables, also these hidden:
+`wdb`, will execute the query in a different database and not the current.<br>
+ `lqry` is a "log" query, <br>
+`ldb` is the database where execute the "log" query, if different otherwise, is not required. <br>
 
 a basic implementation so will be:
 
-`<input type="submit" name="b1" value="Close">
-<input type="submit" name="b2" value="Open">
-<input type="hidden" name="qry1" value="UPDATE pag SET chiusa=1 WHERE id={n1}">
-<input type="hidden" name="qry2" value="UPDATE pag SET chiusa=0 WHERE id={n1}">
-<input type="hidden" id="n1"  name="n1" value="">`
+`
+	<input type="submit" name="b1" value="Close">
+	<input type="submit" name="b2" value="Open">
+	<input type="hidden" name="qry1" value="UPDATE pag SET chiusa=1 WHERE id={n1}">
+	<input type="hidden" name="qry2" value="UPDATE pag SET chiusa=0 WHERE id={n1}">
+	<input type="hidden" id="n1"  name="n1" value="">
+ `
 
 So the first two inputs define two buttons, with the first one is binded the hidden qry1 and with the second qry2.<br>
 The qry1 and qry2, contain the macro {n1}. This value will be replaced with the value of the last hidden input named n1. This will updated programmatically, when the user clicks on the table. <br>
