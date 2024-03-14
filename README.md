@@ -73,7 +73,7 @@ We start with `id`, the uniquiness is granted for (name,grp), so we have to iden
 
 Now we grant them: 
  `
-CREATE TABLE IF  NOT EXISTS mtodu( 
+	CREATE TABLE IF  NOT EXISTS mtodu( 
 			id_m INTEGER NOT NULL,
 			id_d INTEGER, 
 			id_u INTEGER
@@ -93,8 +93,8 @@ Practically you can assign menus withs surgical precision, this is the true gran
 
 # Menu php/html
 
-When we writing a menu that is going to submit we must know wich fields will be processed. The inputs that submits must have the name b1 or b2 or b3. You can easily increase this number adding rows to the variable `$submits`, in the same way you can increase the number of the other macros . With each one of these buttons is associated a query, respectively qry1,qry2,qry3. 
-Now we define some macros<br>
+When we writing a menu that is going to submit we must know wich fields will be processed. The inputs that submits must have the name b1 or b2 or b3. You can easily increase this number adding rows to the variable `$submits`, in the same way you can increase the number of the other macros . With each one of these buttons is associated a query, respectively qry1,qry2,qry3.<br>
+
 	array("s1","{s1}","s")  this will replace all occurrences inside qry(n) of {s1} with the value of the input named s1 formating it as text because s is specified<br>
  	array("n1", "{n1}","n"), as above but n specificate that is a numeric value<br>
   
@@ -269,6 +269,9 @@ We select the menu Admin->New Database :
 
 ![New DB](https://github.com/jurhas/qLite/assets/11569832/580b55f6-1d6e-494a-b55a-d0bff07538dd)
 
+
+
+<br>
 We write our database path. And click on Ok<br>
 This operation will fail if:
 <ul>
@@ -279,8 +282,54 @@ This operation will fail if:
 If suceed the  new added database, will be shown on the right of our current database, but his name is still the path.<br>
 We select the query, update->Database Name , 
 
-![rename DB](https://github.com/jurhas/qLite/assets/11569832/9f64f16d-9834-4094-8afe-61197d0237f8) <br>
+![rename DB](https://github.com/jurhas/qLite/assets/11569832/9f64f16d-9834-4094-8afe-61197d0237f8) 
 
+<br>
 We set the name in the field `db` and if required `grp`. The row is still identificable with the path. <br>
 After you run the query, the new name will be imediatly available, and we will speak never again about the path. Now he is `db`.<br>
 
+### New User and Grant
+
+New user and grant can be done just with SQL queryes. So insert->New User:
+
+![new user](https://github.com/jurhas/qLite/assets/11569832/de7bbe65-0f4c-4812-bee7-b2541820f157)
+
+<br>
+we set the name... done!<br>
+
+Grant->User To DB :
+
+![Grant](https://github.com/jurhas/qLite/assets/11569832/7d33de25-7a73-4fb6-964e-1b4e33faf62d)
+
+Now the user "Jurhas" can access to the Database "wp", but cannot write.
+
+### Menus!!!
+
+For this project I prepared a Menu, and stored in a file. Therefore we have to execute this file. Tools->SQL File 
+
+![File](https://github.com/jurhas/qLite/assets/11569832/f736772a-6693-4e47-a61a-fa608dad90d0)
+
+<br>You can choose if you upload a file, or run a local file. In this case I choose a Local File. If you upload it, it will not be saved.<br>
+
+Now we have to grant the menus:<br>
+admin requires WP and wiki_p<br> 
+Jurhas requires only wiki_p <br>
+The right way would be wiki_p, available for all users inside the database. This way we have to GRANT only the menu `WP` to admin. But to show the tool Concatenate, we assign  each menu to each users.<br>
+First we select all the availables menu: select->Menus and we run it<br>
+We activate the menu Tools->String->Concatenate<br>
+We set already the next query on the text area but we do not run it: grant->Menu. This query is splitted in 4 parts and commented. The right query to grant `wiki_p` would be 
+"Menu Valid only inside a database, for all granted  users", but we choose "Menu Valid only inside a database for only specified users", we select it, copy it and leave only this query<br>
+The menu Concatenate, allows to select values from a table and concatenate in a string, if text is checked, the value will be escaped and wrapped inside the '' and if upper is checked they are also wrapped inside the upper function:<br>
+
+![Grant Menu](https://github.com/jurhas/qLite/assets/11569832/b297c245-22a0-481b-8245-9e359eb559ba)
+
+We click on the values we want concatenate, and they will concatenate inside "service". Now we set menu,id and user. And admin is granted. We do the same with Jurhas and we have all our users granted.<br>
+The Tool Wp, that is included also in the basic function, is a tool that execute the member function load_file($fname). This is. So if you need to load files programmatically, you can change this function accordingly to your file. The problem with pHp is that has no efficient string builder. So if you have  to process a binary file, can be painfull. When I work in C  I do not use prepared statments, because I work with differents database and  I prefer build valid SQL statments and have portable code. My string library is efficient, you cannot appreciate the difference. The first versione of this function  was with this approach, and it cost me 20 minuts, yes with my old laptop where run Linux but 20 minutes. I have already experimented that the combination of `fgets` and `explode` is efficient also in pHp, so if it is possible build your file  writing a record in a row, separated by a sequence of charachter.  `fgets`+`explode`+`prepared statment` does the job well. But if your record is splitted in more rows or you have to read a binary file and concatenate charachters until you find the NULL... opss. If somebody reads... we need an efficient string builder, it is just a single function str_concat(&$str,&mixedvalue), that rather than create a copy, that will trigger an O(n^2), increases $str passed by reference. Of course... if the strings are buffered... otherwise: we need a class.<br>  
+
+## Happy Birthday
+
+Here we have...
+
+![Here](https://github.com/jurhas/qLite/assets/11569832/92a4c6a1-efe2-4223-b5d2-9053815b11ac)
+
+There is a joke of this girl that ask her mother why she cut the tips of the sausages when she put the in the pan... and she says that has seen it from her mother but does not know why, so ask gran-mother same answer, ask grand-grand-mother and she says:  "what? You still didn't buy a bigger pan?". A lot of GUI that run on a browser the try to copy the behaviour of Winodws, the ListView... What? You still do not use the HTML table? It is incredible how nice  and comfortable reports you can do with this instrument.. 
