@@ -31,10 +31,10 @@ SQLite is written.qsort() is one of my preferred functions with memset(), each t
 The journey begins with the download of the file `qLite.php`. It is the only thing required. Put it inside your XAMPP folder or in your website. And just type his name. Somoething like : `localhost/qLite.php`  or `yourwebsite.com/qLite.php`. If you use XAMPP, be careful that SQLite is not available by default. So in Windows you have to go to the php.ini file and decomment `extension=sqlite3` and `pdo_sqlite`. Restart Apache. And now should be available. Also on Linux you have to include these extensions, you have to install the php extension, `chown` the folder and give write rights to `others` with `chmod o+w <folder>`. This last step is hard to find in an online documentation and took me several hours to understand what was wrong.<br>
 Now a look inside, there are various constants, and probably you need to translate the labels but this one is the one that surely the admin have to change. It is his the admin password, already cripyted, accordingly to the Hash algorithm defined with QLITE_HASH_ALG. Take a look to the pHp hash() function to see which algorithms are available. The default password is  `Bella Ciao`, valid also as default password for the users.<br> 
 
-	`
+```
 	define ("QLITE_PWD_PWD","e52cbe1aa2f5cf7b68225ad60eb9ba0d5bc376c5481764d70929eb3d65d00512");
 	define ("QLITE_HASH_ALG","sha256");
-	`
+```
  
 Inside there is a tool that allow you to compute a new password with a specific password field. So may be you make a first access with `Bella Ciao`  compute the new one and overwrite the existing one.<br>
 Inside there is a tool that allow you to compute a new password with a specific password field. So maybe you make the first access with `Bella Ciao`  compute the new one and overwrite the existing one.<br>
@@ -53,7 +53,7 @@ How do we crack this? Just use alias SELECT '10' one,'30' two, 'ed'  foo, you ca
 ## Menu SQL
 
 The table is the follow:
-	`
+```
 	CREATE TABLE IF NOT EXISTS  menus( 
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name TEXT NOT NULL CHECK(length(name)>0),
@@ -64,25 +64,26 @@ The table is the follow:
 		description TEXT,
 		UID INTEGER,
 		dateid TEXT);
-	`
+```
  `id`, the uniqueness is granted for (name,grp), so we have to identify a menu with his id, otherwise becomes uncomfortable.<br>
 `Name`: is the name to be shown.<br>
 `isif`:  if 0,  `cof` (the next field) is raw html/javascript code, if 1 `cof` is the name of a function that get called before the submit.<br>
 `cof`: can be code or the name of a function accordingly to isif. You have to define the function.<br>
 `nameof`: NULL or the name of a function that get called after the submit. You have to define the function. <br>
-`grp`: `grp` here, and only here, accepts also paths, separated by a dot  for example: Tools.String . This will build a submenu. The number of menus can grow very quickly so we need better instruments. But it is still a bottleneck,  I think that with just with few databases we are going to have duplicates, but I still didn't find an elegant solution to avoid this problem. So as C teach us, invent unique names, may be DBNAME_xxx, Operative Systems are written in this way. Or  dbname.operation, for example wp.insert,  the user for each command has to navigate inside two dropdowns, but the uniqueness is achievable.<br>
+`grp`: `grp` here, and only here, accepts also paths, separated by a dot  for example: Tools.String . This will build a submenu. The number of menus can grow very quickly so we need better instruments. But it is still a bottleneck,  I think that with just with few databases we are going to have duplicates, but I still didn't find an elegant solution to avoid this problem. So as C teach us, invent unique names, may be DBNAME_xxx, Operative Systems are written in this way. Or  `dbname.operation`, for example `wp.insert`,  the user for each command has to navigate inside two dropdowns, but the uniqueness is achievable.<br>
 `description`: this is for your use, when you are going to have several menus you will need a brief explanation, rather to read the whole code.<br>
 `UID`: like  GUID but not a GUID, I like a readable number, this is the way I identify my menus, so can I give you some support. It starts from 1,000,000,001, under this number you can use also for your scope.<br>
 `dateid`: the last change for the menu<br>
 
 Now we grant them: 
- 	`
+```
 	CREATE TABLE IF  NOT EXISTS mtodu( 
 			id_m INTEGER NOT NULL,
 			id_d INTEGER, 
 			id_u INTEGER
-   	);`
-Despite his simplicity, it took me a couple of days to define his structure. First I did it in two tables, then triggers, yap several attempts. Until I understood that there is no way to do all the job with a single query, but we have to split the problem.
+   	);
+```
+Despite his simplicity, it took me a couple of days to define his structure. First I did it in two tables, then triggers,after several attempts, until I understood that there is no way to do all the job with a single query, but we have to split the problem.<br>
 Of course id_m (menu) must be NOT NULL, he is our main character. But id_d(dbs) and id_u(users)... why not?
 So there are 4 cases:
 <ul>
@@ -97,65 +98,75 @@ Practically you can assign menus with surgical precision, this is the true grant
 
 ## Menu php/html
 
-When we write a menu that is going to submit, we must know which fields will be processed. The inputs that submits must have the name b1 or b2 or b3. You can easily increase this number adding rows to the variable `$submits`, in the same way you can increase the number of the other macros .  With each one of these buttons is associated a query, respectively qry1,qry2,qry3.<br>
-These queries better will contain macros. For example: {s1}.<br>
-What value we have to give to this macro?
-These macros are defined with the variable $tags, you can increase the number of macros, you can change the aspect of the macro. A row of this variable is so composed:
- array("s1","{s1}","s")  
-the first element is the name of the &lt;input&gt; that contains the value that is going to replace the macro in the form of the second element. The third element tells that is  a string  and it requires to be quoted and escaped, meanwhile n tells that is a number.  Now are defined macros from s1 to s4 and from n1 to n4.<br>
+When we write a menu that is going to submit, we must know which fields will be processed. The inputs that submits must have the name `b1 or b2 or b3`. You can easily increase this number adding rows to the variable `$submits`, in the same way you can increase the number of the other macros .  With each one of these buttons is associated a query, respectively `qry1,qry2,qry3`.<br>
+These queries will contain macros. For example: {s1}.<br>
+What value we have to give to this macro?<br>
+These macros are defined with the variable $tags, you can increase the number of macros and you can change the aspect of them. A row of this variable is so composed:
+```
+ array("s1","{s1}","s")
+``` 
+the first element is the name of the &lt;input&gt; that contains the value that is going to replace the macro in the form of the second element. The third element tells that is  a string  and it requires to be quoted and escaped, meanwhile n tells that is a number.  Now are defined macros from s1 to s6 and from n1 to n6.<br>
 So the  &lt;input&gt; will be:
-
- `<input  name="s1" value="Hello World">`
+```
+ 	<input  name="s1" value="Hello World">
+```
 
 The query will be hidden, nobody can put hands over it:
   
-`<input  type="hidden" name="qry1" value="INSERT INTO foo VALUES({s1}">`
+```
+	<input  type="hidden" name="qry1" value="INSERT INTO foo VALUES({s1})">`
+```
 
-The query qry1 will be executed if the user clicks on the submit b1:  
+The query `qry1` will be executed if the user clicks on the submit `b1`:  
 
-`<input  type="submit" name="b1" value="Hello World">`
+```
+	<input  type="submit" name="b1" value="Insert an Hello World">
+```
 
 You can specify the follow variables, also these hidden:
 `wdb`, will execute the query in a different database and not the current.<br>
- `lqry` is a "log" query, <br>
-`ldb` is the database where execute the "log" query, if different otherwise, is not required. <br>
+ `lqry` is a "log" query, ever executed if defined.<br>
+`ldb` is the database where to execute the "log" query, if different, otherwise it is not required. <br>
 
 a basic implementation so will be:
 
-`
+```
 	<input type="submit" name="b1" value="Close">
 	<input type="submit" name="b2" value="Open">
 	<input type="hidden" name="qry1" value="UPDATE pag SET chiusa=1 WHERE id={n1}">
 	<input type="hidden" name="qry2" value="UPDATE pag SET chiusa=0 WHERE id={n1}">
 	<input type="hidden" id="n1"  name="n1" value="">
- `
+```
 
-So the first two inputs define two buttons, with the first one is binded the hidden qry1 and with the second qry2.<br>
-The qry1 and qry2, contain the macro {n1}. This value will be replaced with the value of the last hidden input named n1. This will updated programmatically, when the user clicks on the table. <br>
-In this way you do not have to write functions a database, and you can quickly perform write operations without occur in accidental UPDATE without WHERE. 
+So the first two inputs define two buttons, with the first one is binded the hidden `qry1` and with the second `qry2`.<br>
+Both these query, contain the macro `{n1}`. This value will be replaced with the value of the last hidden input named `n1`. This will updated programmatically, when the user clicks on the table. <br>
+In this way you do not have to write php functions, and you can handle everything whit the database, you can quickly perform write operations without occur in accidental UPDATE without WHERE. 
  
-# Menu Javascript
-The menu is written in Javascript. So we need some handlers.<br>
+## Menu Javascript
+
+The menu is written in Javascrip, and we need some handlers.<br>
 At the load of the page it calls `on_doc_load()`, that you have to define if you need<br>
 The answer table has class composed from the concatenation of the headers (if valid of course, otherwise nothing, no way that can be a valid query)<br> 
 Each cell has class named after his own header. This can be a bit dangerous, can match existings classes, I used complex name, but I cannot give warranty, if some weird behaviour happen use an alias. <br>
 With each cell is bounded a `on_tbl_clk(row,col)`, that you have to define.<br>
-There is a div with id="serv_container" where there is a empty, and hidden textarea, that show up when get filled. If you need more controls, you need to add them programmatically. <br>
-There is at the very-end a `div` with id `furthertable` where to show, other tables loaded with AJAX.<br>
-If you use AJAX, you have to do it with `POST` and you must set a variable named `ajax`. A query specified in a variable `aqry` and if you need a different database you have to specificate it with  `adb` so a tipically AJAX request will be:
+There is a `<div with id="serv_container">` where there is a empty, and hidden `<textarea id="service">`, that show up when get filled. If you need more controls, you need to add them programmatically. <br>
+There is at the very-end a `<div id="furthertable">` where to show, other tables loaded with AJAX.<br>
+If you use AJAX, you have to do it with `POST` and you must set a variable named `ajax`. The  query have to be specified in the  variable `aqry` and if you need a different database you have to specificate it with  `adb` so a tipically AJAX request will be:
 
-`
-var par=\`ajax=1&aqry=\` + \`SELECT par,row,col FROM par WHERE id_p=\` + tbl.rows[r].cells[0].innerHTML ;
-xhr.open(\`POST\`, \`qLite.php\`,true);
-`
-First row: we define the variables to pass, first the variable `ajax` we give a value not important what, we define `aqry`, with our query.<br>
+```
+	var par=`ajax=1&aqry=` + `SELECT par,row,col FROM par WHERE id_p=` + tbl.rows[r].cells[0].innerHTML ;
+	xhr.open(`POST`, `qLite.php`,true);
+```
+`Par` are the variables to pass: first the variable `ajax` we give a value not important what, we define `aqry`, with our query.<br>
 Second row: we open a request `POST`.<br>
 Up to you where to display it. <br>
 
 A simple example:<br>
-My site: I want to allow people to click on a link and open the relative wikipedia page. I must escape the query or people can write malicious code. So I cannot use links inside the query. I catch the column where is stored the link, that is named path, therefore his class is also path. In the `on_doc_load()` function I define the style to format the column as link,and comunicate people that this column is clickable. And when he clicks, it calls the function `on_tbl_clk`, I check if he clicked the right column and then I open the link consequently. 
-`
-	<script> function on_doc_load() 
+My site: I want to allow people to click on a link and open the relative wikipedia page. I must escape the query or people can write malicious code. So I cannot use links inside the answer table. I catch the column where is stored the link, that is named `path`, therefore his class is also `path`. In the `on_doc_load()` function I define the style to format the column as link,and comunicate people that this column is clickable. And when he clicks, it calls the function `on_tbl_clk`, I check if he clicked the right column and then I open the link consequently. 
+
+```
+	<script>
+	function on_doc_load() 
 	  { 
 	  
 		var styleSheet = document.createElement("style");
@@ -163,20 +174,23 @@ My site: I want to allow people to click on a link and open the relative wikiped
 		document.body.appendChild(styleSheet);
 		} 
 	  
-	  function on_tbl_clk(r,c) 
-	  { 
+	function on_tbl_clk(r,c) 
+ 	{ 
 		var tbl= document.getElementById("anstbl"); 
 		if(tbl.rows[0].cells[c].innerHTML=="path") 
-			window.open("https://it.wikipedia.org/wiki/" + tbl.rows[r].cells[c].innerHTML , "_blank"); } 
-	</script>'
-`
+			window.open("https://it.wikipedia.org/wiki/" + tbl.rows[r].cells[c].innerHTML , "_blank");
+	} 
+	</script>
+```
+
 A complete example:<br>
 We define a button where we suggest the rigth query, the one that allows the users to work. The query is `SELECT id,titolo,autore,chiusa, '' p ...` so the class name will be `idtitoloautorechiusap`.<br>
-We define the inputs and the relative queryes.<br>
+A bit HTML to define the inputs and a table where to show the resume of the current operation.<br>
 Also here `on_doc_load()` we  define the styles to allert people that Ok! this is the right query. <br>
 In the `on_tbl_clk()` function we check first if the query is the right one: until this menu is selected does not matter if it is the right query or less, this function will process each click of the user, therefore we must exit if wrong.  We toggle the  selected row, we set the input `n1` with the id, this is important, otherwise the queryes are not executable, and we open an ajax request, the same as above. I show the answer in the same table, It is nice to see and comfortable. And last, if he clicks in a specific cell, will open the relative wiki page.  
 
-`<span style="position:relative; top:0%; left:0%; "> Get query<br></span>
+```
+	<span style="position:relative; top:0%; left:0%; "> Get query<br></span>
 	<button  type="button"  onclick="javascript:set_val(`str`,`SELECT id,titolo,autore,chiusa, '''' p FROM pag WHERE chiusa=0;`);">Get Query</button> 
 	<button   type="button" onclick="javascript:document.getElementById(`help`).style.setProperty(`display`,`block`);"> Help</button>
 	
@@ -244,7 +258,8 @@ In the `on_tbl_clk()` function we check first if the query is the right one: unt
 			window.open("https://it.wikipedia.org/wiki/" + tbl.rows[r].cells[1].innerHTML , "_blank");  
 			
 	}
-	</script>`
+	</script>
+```
 
 
 
@@ -253,9 +268,10 @@ In the `on_tbl_clk()` function we check first if the query is the right one: unt
 Ok probably until now is it not all clear. Now we are going to show a whole step by step configuration.
 
 ### The first login 
+
 ![FirstLogin](https://github.com/jurhas/qLite/assets/11569832/b2a8d099-415f-4c41-8abd-82a3727c8606)
 
-If admin digits the wrong database, (empty is surely wrong),  he will readressed to the main.<br>
+If admin digits the wrong database, (empty is surely wrong),  he will readressed to the `main`.<br>
 The first password is `Bella Ciao`.<br>
 The first login creates the main database.<br>
 
