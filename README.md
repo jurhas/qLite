@@ -13,7 +13,7 @@ The scope of work:
   <li>Allow safe write operations also to not experienced users </li>
   <li>Allow people to work in the same database no matter where they are and create small work tasks</li>
   <li>Build masks, MS Access style</li>
-  <li>Lightweight, fast and no external dependencies but SQLite. qLite is just a. Single. PHP. File.</li>
+  <li>Lightweight, fast and no external dependencies but SQLite. qLite is. Just. A. Single. PHP. File.</li>
 </ul>
 If it seems too much... no it is not too much, I am surely forgetting something.
 Target are internet community that works on the same project. Companies that work with small-medium project. And everywhere several users requires sharing a common database, but they do not want to invest in a server DELL IperPower  99-a_lot_of_0's-20  where to run Oracle Enterprise Edition.
