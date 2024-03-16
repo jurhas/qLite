@@ -21,10 +21,10 @@ Target are internet community that works on the same project. Companies that wor
 ## History
 
 I briefly tell the history of this project. 
-I was boting the italian Wikipedia dump, when my bot begins to send me weird answer. In this case Bio's where the Sex was not set. "I hope it found a Teletubby", it wasn't.  After few investigations I found out that there was some parenthesis to fix. This time I was not guilty(ah... never scan the comments... long histroy). I scanned again the dump and I detect all the parenthesis, and I want to give them a relative big file to help them to maintain the wiki . And here comes the problem: how do I give them a structured filed? My provider barely allow me to access to my database, MS Access... No! MS Access No!, but also if I would use it there is no way to allow people scattered across Italy to work on the same db. SQLite requires experienced users, you need a shell or a GUI( matter of taste), and also here no way to share databases.<br> 
+I was boting the italian Wikipedia dump, when my bot begins to send me weird answer. In this case Bio's where the Sex was not set. "I hope it found a Teletubby", it wasn't.  After few investigations I found out that there was some parenthesis to fix. This time I was not guilty(ah... never scan the comments of the dump...). I scanned again the dump and I detect all the parenthesis, and I want to give them a relative big file to help them to maintain the wiki . And here comes the problem: how do I give them a structured filed? My provider barely allow me to access to my database, MS Access... No! MS Access No!, but also if I would use it there is no way to allow people scattered across Italy to work on the same db. SQLite requires experienced users, you need a shell or a GUI( matter of taste), and also here no way to share databases.<br> 
 Hold my beer...qLite is born.<br>
 The name is not obtained from cropping the S, in SQLite, in this case would be capital. The q is dedicated to the C function qsort(). My beloved language and the language which 
-SQLite is written.qsort() is one of my preferred functions with the memxxx() functions, each time I use this function I am dumbly happy, never understood why. The q in qsort() means "quick", so "qLite"  would mean "quick (and) Lite", that match perfectly with the philosophy of this project. Ok, it is pervert enough: taken.
+SQLite is written.qsort() is one of my preferred functions with the mem...() functions, each time I use this function I am dumbly happy, never understood why. The q in qsort() means "quick", so "qLite"  would mean "quick (and) Lite", that match perfectly with the philosophy of this project. Ok, it is pervert enough: taken.
 
 ## Structure
 
@@ -434,3 +434,19 @@ Ecco a voi:
 ![Here](https://github.com/jurhas/qLite/assets/11569832/92a4c6a1-efe2-4223-b5d2-9053815b11ac)
 
 There is a joke of this girl that ask her mother why she cut the tips of the sausages when she put them in the pan... and she says that has seen it from her mother but does not know why, so ask gran-mother same answer, ask grand-grand-mother and she says:  "what? You still didn't buy a bigger pan?". A lot of GUI that run on a browser try to copy the behaviour of Winodws, the ListView... What? You still do not use the HTML table? It is incredible how nice  and comfortable reports you can do with this instrument.. 
+
+## TODO List
+
+This is cleary the first version, the beta version. I plan to do:
+<ul>
+	<li>Syntax Highlighter</li>
+	<li>Full Text Index... poor-man full text index. But there is no way to make a rich-man full text index, also if I was able to put hands inside the SQLite code, and insert an index in a database is not surely the easiest thing in the world, the library is from pHp not mine, so no way. But with LIKE we can scan I think until few thousand  rows without big problems.</li>
+	<li>Give you support with my web site, and therefore I will give you a tool to check the new menus or the updates for the released one </li>
+	<li>Fine work with the styles</li>
+ 	<li>Fine work with all behaviours</li>
+	<li>At this purpose each feedback is really welcome, write me here or  to andrea_spanu(at)yahoo.it</li>
+	<li>If the next version is not compatible with the current, a will give you a migration tool</li>
+</ul>
+ If you do changes inside take note, if you want change styles, include scripts, make it with an extern file.<br>
+ I go back to my wiki dump, so I am going to find the real needs and the problems. I plan the next release in May.
+
