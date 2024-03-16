@@ -9,7 +9,7 @@ The scope of work:
   <li>Supports Users</li>
   <li>Supports Grants</li>
   <li>Assign databases to Users (where to write CREATE TABLE for example)</li>
-  <li>No Hardware required, just few kB of space in a internet site</li>
+  <li>No Hardware required, just few kB of space in a internet site purchased by a provider </li>
   <li>Allow safe write operations also to not experienced users </li>
   <li>Allow people to work in the same database no matter where they are and create small work tasks</li>
   <li>Build masks, MS Access style</li>
