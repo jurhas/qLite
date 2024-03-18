@@ -367,7 +367,7 @@ Now we have to grant the menus, we prepare our grant list:<br>
 
 The db is `WP`<br>
 all users require `wiki_p`<br>
-admin requires `WP`, and `Save Query`<br> 
+admin requires `WP`, and `Save Query` (admin is already granted for Save Query but I want to show you the concatenate tool, if you run these query you are going to have a constraint violation, just do not insert it) <br> 
 Jurhas, our team-manager, requires `Save Query` <br>
 
 `Save Query` is a tool to save the queries in the table qLite_qry. Nobody can write so, teoretically, nobody could save query inside. You cannot give this menu to all, or surely the people begin to save "SELECT 2+2" "very important query". All users are going to load these query, therefore all users are going to read these "very important query". This means, that only the team-manager can save the query.<br>
