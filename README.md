@@ -81,7 +81,7 @@ The table is the follow:
 		dateid TEXT,
 		db TEXT NOT NULL DEFAULT '');
 ```
- `id`, the uniqueness is granted for (name,grp), so we have to identify a menu with his id, otherwise becomes uncomfortable.<br>
+ `id`, the uniqueness is granted for (name,grp,db), so we have to identify a menu with his id, otherwise becomes uncomfortable.<br>
 `Name`: is the name to be shown.<br>
 `isif`:  if 0,  `cof` (the next field) is raw html/javascript code, if 1 `cof` is the name of a function that get called before the submit.<br>
 `cof`: can be code or the name of a function accordingly to isif. You have to define the function.<br>
@@ -181,23 +181,21 @@ Up to you where to display it. <br>
 A simple example:<br>
 My site: I want to allow people to click on a link and open the relative wikipedia page. I must escape the query or people can write malicious code. So I cannot use links inside the answer table. I catch the column where is stored the link, that is named `path`, therefore his class is also `path`. In the `on_doc_load()` function I define the style to format the column as link,and comunicate people that this column is clickable. And when he clicks, it calls the function `on_tbl_clk`, I check if he clicked the right column and then I open the link consequently. 
 
-```
-	<script>
+```<script>
 	function on_doc_load() 
 	  { 
 	  
-		var styleSheet = document.createElement("style");
-		styleSheet.innerHTML=".path td {color:#069;text-decoration: underline;cursor: pointer;}";
-		document.body.appendChild(styleSheet);
-		} 
+		document.getElementsByTagName("style")[0] .innerHTML+=
+		".anstbl .path, .anstbl .titolo {color:#069;text-decoration: underline;cursor	: pointer;}";
+	} 
 	  
 	function on_tbl_clk(r,c) 
  	{ 
-		var tbl= document.getElementById("anstbl"); 
-		if(tbl.rows[0].cells[c].innerHTML=="path") 
+		var tbl= document.getElementsByClassName("anstbl")[0]; 
+		if(tbl.rows[0].cells[c].innerHTML=="path" ||tbl.rows[0].cells[c].innerHTML=="titolo" ) 
 			window.open("https://it.wikipedia.org/wiki/" + tbl.rows[r].cells[c].innerHTML , "_blank");
 	} 
-	</script>
+</script>
 ```
 
 A complete example:<br>
