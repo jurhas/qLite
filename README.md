@@ -16,7 +16,7 @@ The scope of work:
   <li>Lightweight, fast and no external dependencies but SQLite. qLite is. Just. A. Single. PHP. File.</li>
 </ul>
 If it seems too much... no it is not too much, I am surely forgetting something.
-Target are internet community that works on the same project. Companies that work with small-medium project. And everywhere several users requires sharing a common database, but they do not want to invest in a server DELL IperPower  99-a_lot_of_0's-20  where to run Oracle Enterprise Edition.
+Target are internet community that works on the same project. Companies that work with small-medium project. And everywhere several users requires sharing a common database, but they do not want to invest in a server DELL Power  99-a_lot_of_0's-20  where to run Oracle Enterprise Edition.
 
 ## History
 
@@ -24,7 +24,7 @@ I briefly tell the history of this project.
 I was boting the italian Wikipedia dump, when my bot begins to send me weird answer. In this case Bio's where the Sex was not set. "I hope it found a Teletubby", it wasn't.  After few investigations I found out that there was some parenthesis to fix. This time I was not guilty(ah... never scan the comments of the dump...). I scanned again the dump and I detect all the parenthesis, and I want to give them a relative big file to help them to maintain the wiki . And here comes the problem: how do I give them a structured filed? My provider barely allow me to access to my database, MS Access... No! MS Access No!, but also if I would use it there is no way to allow people scattered across Italy to work on the same db. SQLite requires experienced users, you need a shell or a GUI( matter of taste), and also here no way to share databases.<br> 
 Hold my beer...qLite is born.<br>
 The name is not obtained from cropping the S, in SQLite, in this case would be capital. The q is dedicated to the C function qsort(). My beloved language and the language which 
-SQLite and pHo are written.qsort() is one of my preferred functions with the mem...() functions, each time I use this function I am dumbly happy, never understood why. The q in qsort() means "quick", so "qLite"  would mean "quick (and) Lite", that match perfectly with the philosophy of this project. Ok, it is pervert enough: taken.
+SQLite and pHp are written.qsort() is one of my preferred functions with the mem...() functions, each time I use them I feel a C programmer. The q in qsort() means "quick", so "qLite"  would mean "quick (and) Lite", that match perfectly with the philosophy of this project. Ok, it is pervert enough: taken.
 
 ## Structure
 
